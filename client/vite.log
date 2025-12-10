@@ -1,0 +1,10 @@
+nohup: ignoring input
+Port 5173 is in use, trying another one...
+
+  VITE v5.4.21  ready in 187 ms
+
+  ➜  Local:   http://localhost:5174/
+  ➜  Network: use --host to expose
+3:08:28 AM [vite] http proxy error: /api/clients
+Error: connect ECONNREFUSED 127.0.0.1:3000
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1637:16)

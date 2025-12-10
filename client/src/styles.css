@@ -1,0 +1,17 @@
+:root{
+  --bg:#f5f8fb; --card:#ffffff; --primary:#0b74de; --muted:#6b7280;
+}
+body{font-family:Inter, Arial, sans-serif;background:var(--bg);margin:0;color:#111}
+.topnav{display:flex;gap:12px;padding:12px;background:linear-gradient(90deg,var(--primary),#2b6fb2);color:#fff}
+.topnav a{color:#fff;text-decoration:none}
+.topnav button{background:transparent;border:1px solid rgba(255,255,255,.3);color:#fff;padding:6px 10px;border-radius:6px}
+.app main{padding:16px}
+.card{background:var(--card);padding:12px;border-radius:8px;box-shadow:0 2px 8px rgba(11,116,222,0.08)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+.btn{background:var(--primary);color:#fff;border:none;padding:8px 12px;border-radius:6px;cursor:pointer}
+.muted{color:var(--muted)}
+.small{font-size:0.9rem}
+
+/* simple animation */
+.fade-enter{opacity:0;transform:translateY(6px)}
+.fade-enter-active{opacity:1;transform:none;transition:all .3s}
