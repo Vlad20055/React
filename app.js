@@ -14,11 +14,13 @@ const authRouter = require('./src/routes/auth');
 const clientsRouter = require('./src/routes/clients');
 const devicesRouter = require('./src/routes/devices');
 const repairsRouter = require('./src/routes/repairs');
+const aiRouter = require('./src/routes/ai');
 
 app.use('/api/auth', authRouter);
 app.use('/api/clients', clientsRouter);
 app.use('/api/devices', devicesRouter);
 app.use('/api/repairs', repairsRouter);
+app.use('/api/ai', aiRouter);
 
 app.get('/', (req, res) => res.json({ service: 'Service Center API', variant: 18 }));
 

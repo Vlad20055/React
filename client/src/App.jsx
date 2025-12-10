@@ -5,6 +5,7 @@ import Catalog from './pages/Catalog'
 import DeviceView from './pages/DeviceView'
 import Clients from './pages/Clients'
 import Repairs from './pages/Repairs'
+import DeviceDiagnostic from './pages/DeviceDiagnostic'
 import Login from './pages/Login'
 
 export default function App(){
@@ -24,6 +25,7 @@ export default function App(){
         <Link to="/catalog">Catalog</Link>
         <Link to="/clients">Clients</Link>
         <Link to="/repairs">Repairs</Link>
+        <Link to="/diagnostic">Diagnostic AI</Link>
         {token ? <button onClick={logout}>Logout</button> : <Link to="/login">Login</Link>}
       </nav>
       <main>
@@ -33,6 +35,7 @@ export default function App(){
           <Route path="/devices/:id" element={<DeviceView token={token}/> } />
           <Route path="/clients" element={<Clients token={token}/> } />
           <Route path="/repairs" element={<Repairs token={token}/> } />
+          <Route path="/diagnostic" element={<DeviceDiagnostic token={token} />} />
           <Route path="/login" element={<Login onAuth={t=>setToken(t)} />} />
         </Routes>
       </main>

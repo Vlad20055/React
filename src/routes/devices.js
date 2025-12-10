@@ -1,5 +1,7 @@
 const express = require('express');
 const router = express.Router();
+const { body, validationResult } = require('express-validator');
+const auth = require('../middleware/auth');
 const Device = require('../models/device');
 const Client = require('../models/client');
 
@@ -16,20 +18,27 @@ router.get('/', async (req, res) => {
   }
 });
 
-// Create device
-router.post('/', async (req, res) => {
-  try {
-    const { clientId, brand, model, serial, notes } = req.body;
-    if (!clientId || !brand || !model || !serial) return res.status(400).json({ error: 'clientId, brand, model, serial required' });
-    const client = await Client.findById(clientId);
-    if (!client) return res.status(400).json({ error: 'client not found' });
-    const device = new Device({ client: clientId, brand, model, serial, notes });
-    await device.save();
-    res.status(201).json(device);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
+// Create device (requires auth)
+router.post('/', auth,
+  body('clientId').trim().notEmpty().withMessage('clientId required'),
+  body('brand').trim().notEmpty().withMessage('brand required'),
+  body('model').trim().notEmpty().withMessage('model required'),
+  body('serial').trim().notEmpty().withMessage('serial required'),
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
+    try {
+      const { clientId, brand, model, serial, notes } = req.body;
+      const client = await Client.findById(clientId);
+      if (!client) return res.status(400).json({ error: 'client not found' });
+      const device = new Device({ client: clientId, brand, model, serial, notes });
+      await device.save();
+      res.status(201).json(device);
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
   }
-});
+);
 
 // Get by id
 router.get('/:id', async (req, res) => {

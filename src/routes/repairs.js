@@ -1,5 +1,7 @@
 const express = require('express');
 const router = express.Router();
+const { body, validationResult } = require('express-validator');
+const auth = require('../middleware/auth');
 const Repair = require('../models/repair');
 const Device = require('../models/device');
 
@@ -16,20 +18,25 @@ router.get('/', async (req, res) => {
   }
 });
 
-// Create repair
-router.post('/', async (req, res) => {
-  try {
-    const { deviceId, description, status, cost, technician, estimatedCompletion } = req.body;
-    if (!deviceId || !description) return res.status(400).json({ error: 'deviceId and description required' });
-    const device = await Device.findById(deviceId);
-    if (!device) return res.status(400).json({ error: 'device not found' });
-    const repair = new Repair({ device: deviceId, description, status, cost, technician, estimatedCompletion });
-    await repair.save();
-    res.status(201).json(repair);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
+// Create repair (requires auth)
+router.post('/', auth,
+  body('deviceId').trim().notEmpty().withMessage('deviceId required'),
+  body('description').trim().notEmpty().withMessage('description required'),
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
+    try {
+      const { deviceId, description, status, cost, technician, estimatedCompletion } = req.body;
+      const device = await Device.findById(deviceId);
+      if (!device) return res.status(400).json({ error: 'device not found' });
+      const repair = new Repair({ device: deviceId, description, status, cost, technician, estimatedCompletion });
+      await repair.save();
+      res.status(201).json(repair);
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
   }
-});
+);
 
 router.get('/:id', async (req, res) => {
   try {
@@ -41,15 +48,21 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-router.put('/:id', async (req, res) => {
-  try {
-    const data = req.body;
-    const r = await Repair.findByIdAndUpdate(req.params.id, data, { new: true });
-    if (!r) return res.status(404).json({ error: 'repair not found' });
-    res.json(r);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
+// Update repair (requires auth)
+router.put('/:id', auth,
+  body('description').optional().trim().notEmpty().withMessage('description required'),
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
+    try {
+      const data = req.body;
+      const r = await Repair.findByIdAndUpdate(req.params.id, data, { new: true });
+      if (!r) return res.status(404).json({ error: 'repair not found' });
+      res.json(r);
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
   }
-});
+);
 
 module.exports = router;

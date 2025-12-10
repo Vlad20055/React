@@ -2,7 +2,11 @@ const express = require('express');
 const router = express.Router();
 const { body, validationResult } = require('express-validator');
 const jwt = require('jsonwebtoken');
+const { OAuth2Client } = require('google-auth-library');
 const User = require('../models/user');
+
+const GOOGLE_CLIENT_ID = '95612592596-kg220l1qgdmjfsmmkanklri9rt73ih92.apps.googleusercontent.com';
+const googleClient = new OAuth2Client(GOOGLE_CLIENT_ID);
 
 router.post('/register', [
   body('username').isLength({ min: 3 }),
@@ -39,6 +43,28 @@ router.post('/login', [
     res.json({ token });
   } catch (err) {
     res.status(500).json({ error: err.message });
+  }
+});
+
+router.post('/google', async (req, res) => {
+  const { token } = req.body;
+  if (!token) return res.status(400).json({ error: 'token required' });
+  try {
+    const ticket = await googleClient.verifyIdToken({ idToken: token, audience: GOOGLE_CLIENT_ID });
+    const payload = ticket.getPayload();
+    const email = payload.email;
+    const name = payload.name;
+    
+    let user = await User.findOne({ username: email });
+    if (!user) {
+      user = new User({ username: email, password: 'google-' + payload.sub, role: 'client' });
+      await user.save();
+    }
+    
+    const jwtToken = jwt.sign({ id: user._id, username: user.username, role: user.role }, process.env.JWT_SECRET || 'replace_this_with_a_secure_secret', { expiresIn: '8h' });
+    res.json({ token: jwtToken, user: { email, name } });
+  } catch (err) {
+    res.status(401).json({ error: 'Invalid Google token: ' + err.message });
   }
 });
 
