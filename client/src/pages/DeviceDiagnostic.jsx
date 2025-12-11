@@ -64,7 +64,7 @@ export default function DeviceDiagnostic({ token }){
   }
 
   return (
-    <div>
+    <div className="diagnostic-page">
       <h2>Device Diagnostic AI</h2>
       <div style={{ marginBottom: '12px' }}>
         <button

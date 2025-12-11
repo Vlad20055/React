@@ -1,17 +1,191 @@
 :root{
-  --bg:#f5f8fb; --card:#ffffff; --primary:#0b74de; --muted:#6b7280;
+  /* Theme variables (blue / gray technical palette) */
+  --bg: #f4f7fb;
+  --surface: #ffffff;
+  --primary: #0b74de; /* vivid blue */
+  --primary-600: #075fae;
+  --accent: #2b6fb2;
+  --muted: #6b7280; /* gray */
+  --muted-2: #9aa3ad;
+  --border: #e6eef9;
+  --shadow: rgba(11,116,222,0.06);
+  --success: #12a454;
+  --warn: #ffb020;
+  --danger: #e03131;
+  --glass: linear-gradient(180deg, rgba(255,255,255,0.6), rgba(255,255,255,0.4));
+  --radius: 10px;
+  --transition-fast: 180ms;
+  --transition-med: 320ms;
+  --max-width: 1100px;
 }
-body{font-family:Inter, Arial, sans-serif;background:var(--bg);margin:0;color:#111}
-.topnav{display:flex;gap:12px;padding:12px;background:linear-gradient(90deg,var(--primary),#2b6fb2);color:#fff}
-.topnav a{color:#fff;text-decoration:none}
-.topnav button{background:transparent;border:1px solid rgba(255,255,255,.3);color:#fff;padding:6px 10px;border-radius:6px}
+
+/* Base layout */
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+  background: var(--bg);
+  color: #0f1724;
+  margin:0;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+}
+
+.site-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  padding:14px 18px;
+  background: linear-gradient(90deg,var(--primary),var(--accent));
+  color:#fff;
+}
+.site-header .brand{font-weight:700;letter-spacing:0.2px}
+.nav{display:flex;gap:12px;align-items:center}
+.nav a{color:inherit;text-decoration:none;padding:8px 10px;border-radius:8px;transition:background var(--transition-fast),transform var(--transition-fast)}
+.nav a:hover{background:rgba(255,255,255,0.08);transform:translateY(-1px)}
+.nav a:active{transform:translateY(0)}
+.nav .btn{margin-left:6px}
+
+/* Backwards-compatibility for earlier templates */
+.topnav{display:flex;gap:12px;padding:12px;background:linear-gradient(90deg,var(--primary),var(--accent));color:#fff;align-items:center}
+.topnav a{color:inherit;text-decoration:none}
+.topnav button{background:transparent;border:1px solid rgba(255,255,255,.18);color:#fff;padding:6px 10px;border-radius:6px}
 .app main{padding:16px}
-.card{background:var(--card);padding:12px;border-radius:8px;box-shadow:0 2px 8px rgba(11,116,222,0.08)}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
-.btn{background:var(--primary);color:#fff;border:none;padding:8px 12px;border-radius:6px;cursor:pointer}
+
+.container{max-width:var(--max-width);margin:20px auto;padding:0 16px}
+
+/* Cards and info blocks (semantic) */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px;box-shadow:0 6px 18px var(--shadow);transition:box-shadow var(--transition-med),transform var(--transition-med)}
+.card:hover{box-shadow:0 10px 28px rgba(11,116,222,0.08);transform:translateY(-4px)}
+.card__header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.card__title{font-size:1.05rem;font-weight:600;color:#072a44}
+.card__meta{color:var(--muted);font-size:0.9rem}
+.card__body{font-size:0.95rem;line-height:1.45;color:#0b2233}
+.card__footer{margin-top:12px;display:flex;gap:8px;align-items:center}
+
+/* Component-scoped card */
+.repairs-page .card{border-left:4px solid rgba(11,116,222,0.12);padding:14px}
+.clients-page .card{border-left:4px solid rgba(43,111,178,0.10);padding:14px}
+.catalog-page .card{border-left:4px solid rgba(43,111,178,0.06);padding:14px}
+.diagnostic-page .card{border-left:4px solid rgba(11,116,222,0.14);padding:14px}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}
+.col-6{grid-column:span 6}
+.col-4{grid-column:span 4}
+.col-3{grid-column:span 3}
+.col-12{grid-column:span 12}
+.row{display:flex;gap:12px;flex-wrap:wrap}
+.stack{display:flex;flex-direction:column;gap:8px}
+
+/* 12-column explicit grid when needed */
+.grid-12{display:grid;grid-template-columns:repeat(12,1fr);gap:12px}
+
+/* Buttons */
+.btn{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:8px;border:1px solid transparent;cursor:pointer;font-weight:600;transition:all var(--transition-fast)}
+.btn--primary{background:var(--primary);color:#fff}
+.btn--primary:hover{background:var(--primary-600);transform:translateY(-2px)}
+.btn--muted{background:transparent;border:1px solid var(--border);color:var(--muted)}
+.btn:active{transform:translateY(0)}
+.btn:focus{outline:3px solid rgba(11,116,222,0.14);outline-offset:2px}
+
+/* Forms */
+.form-row{display:flex;gap:12px;align-items:center}
+.form-control{display:flex;flex-direction:column;gap:6px}
+.label{font-size:0.85rem;color:var(--muted)}
+.input{padding:10px 12px;border-radius:8px;border:1px solid var(--border);background:linear-gradient(180deg,#fff,#fbfdff);transition:border var(--transition-fast),box-shadow var(--transition-fast)}
+.input:focus{border-color:var(--primary);box-shadow:0 6px 18px rgba(11,116,222,0.06);outline:none}
+.input:placeholder{color:var(--muted-2)}
+
+/* Base styling for form elements when .input isn't applied (improves compatibility) */
+input,textarea,select{
+  font-family:inherit;
+  padding:10px 12px;border-radius:8px;border:1px solid var(--border);background:linear-gradient(180deg,#fff,#fbfdff);transition:border var(--transition-fast),box-shadow var(--transition-fast);
+}
+textarea{min-height:60px}
+input:focus,textarea:focus,select:focus{border-color:var(--primary);box-shadow:0 6px 18px rgba(11,116,222,0.06);outline:none}
+button,input[type="submit"]{font-family:inherit}
+
+/* Tables / lists */
+.table{width:100%;border-collapse:collapse}
+.table th,.table td{padding:10px 12px;text-align:left;border-bottom:1px solid #f0f4fb}
+.table th{color:var(--muted);font-weight:700;font-size:0.85rem}
+
+/* Device list */
+.device-list{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px}
+.device-item{display:flex;align-items:center;gap:12px;padding:12px;border-radius:10px;background:linear-gradient(180deg,#ffffff,#fbfdff);border:1px solid var(--border);transition:transform var(--transition-fast),box-shadow var(--transition-fast)}
+.device-item:hover{transform:translateY(-4px);box-shadow:0 10px 24px rgba(11,116,222,0.06)}
+.device-item .meta{color:var(--muted);font-size:0.9rem}
+
+/* Scoped device list for catalog page */
+.catalog-page .device-item{background:linear-gradient(180deg,#fbfdff,#f7fbff)}
+
+/* Visuals for runtime mouse handlers */
+.card.is-hovered{border-color:var(--primary);box-shadow:0 12px 32px rgba(11,116,222,0.08);transform:translateY(-6px)}
+.btn.pressed{transform:translateY(1px) scale(.995);box-shadow:none;opacity:0.95}
+
+/* Repair progress indicators */
+.repair-item{display:flex;flex-direction:column;gap:10px}
+.repair-progress{display:flex;flex-direction:column;gap:8px}
+.progress-bar{position:relative;height:12px;background:#e9f3fb;border-radius:999px;overflow:hidden;border:1px solid #dceefa}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--primary),var(--accent));width:0%;transition:width 700ms cubic-bezier(.2,.9,.2,1)}
+.progress-text{display:flex;justify-content:space-between;font-size:0.85rem;color:var(--muted)}
+
+/* Repairs page specific styles */
+.repairs-page h2{color:var(--primary-600);margin-bottom:12px}
+.repairs-page .card__title{color:#053041}
+.repairs-page .progress-text{font-weight:600}
+.repairs-page .status-received .dot{background:#d8eaf9}
+.repairs-page .status-diagnosing .dot{background:linear-gradient(90deg,var(--primary),var(--accent))}
+.repairs-page .status-in-progress .dot{background:linear-gradient(90deg,#ffb020,#ff8a00)}
+.repairs-page .status-ready .dot{background:var(--success)}
+
+/* Stepper style (discrete stages) */
+.steps{display:flex;gap:12px;align-items:center}
+.step{display:flex;flex-direction:column;align-items:center;gap:6px;font-size:0.85rem;color:var(--muted)}
+.step .dot{width:14px;height:14px;border-radius:50%;background:#d8eaf9;border:2px solid #d8eaf9;transition:background var(--transition-fast),transform var(--transition-fast)}
+.step.completed .dot{background:var(--primary);border-color:var(--primary);box-shadow:0 6px 14px rgba(11,116,222,0.12);transform:scale(1.05)}
+.step.active{color:var(--primary-600);font-weight:700}
+
+/* Animations */
+@keyframes pulse{0%{transform:scale(1);opacity:1}50%{transform:scale(1.06);opacity:.85}100%{transform:scale(1);opacity:1}}
+.pulse{animation:pulse 2s ease-in-out infinite}
+
+/* Loading spinner */
+.spinner{width:28px;height:28px;border-radius:50%;border:4px solid rgba(11,116,222,0.12);border-top-color:var(--primary);animation:spin 0.9s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* Micro interactions */
 .muted{color:var(--muted)}
 .small{font-size:0.9rem}
 
-/* simple animation */
+/* Simple fade transition class (used by router transitions) */
 .fade-enter{opacity:0;transform:translateY(6px)}
-.fade-enter-active{opacity:1;transform:none;transition:all .3s}
+.fade-enter-active{opacity:1;transform:none;transition:all .3s var(--transition-fast)}
+
+/* Responsive adjustments */
+@media (max-width:900px){
+  .grid{grid-template-columns:repeat(6,1fr)}
+  .col-6{grid-column:span 6}
+  .col-4{grid-column:span 6}
+  .col-3{grid-column:span 6}
+  .container{padding:0 12px}
+}
+@media (max-width:520px){
+  .site-header{padding:12px}
+  .nav{display:none}
+  .card{padding:12px}
+}
+
+/* Accessibility helpers */
+.visually-hidden{position:absolute!important;height:1px;width:1px;overflow:hidden;clip:rect(1px,1px,1px,1px);white-space:nowrap}
+
+/* Semantic utility classes (for quick templating) */
+.info{border-left:3px solid var(--accent);padding-left:12px}
+.warning{border-left:3px solid var(--warn);padding-left:12px}
+.success{border-left:3px solid var(--success);padding-left:12px}
+
+/* Example usage for repair progress (JS can set width on .progress-fill) */
+.repair-progress--small .progress-bar{height:8px}
+
+/* End of stylesheet */

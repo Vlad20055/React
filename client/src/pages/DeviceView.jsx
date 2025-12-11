@@ -13,7 +13,7 @@ export default function DeviceView(){
   if (!device) return <div className="card">Loading...</div>
 
   return (
-    <div>
+    <div className="device-page">
       <h2>Device</h2>
       <div className="card">
         <h3>{device.brand} {device.model}</h3>

@@ -49,7 +49,7 @@ function LoginContent({ onAuth }){
   }
 
   return (
-    <div style={{maxWidth:'600px', marginTop:'20px'}}>
+    <div className="login-page" style={{maxWidth:'600px', marginTop:'20px'}}>
       <div className="card">
         <h3>Login</h3>
         <form onSubmit={submitForm}>

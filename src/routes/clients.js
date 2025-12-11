@@ -20,9 +20,17 @@ router.get('/', async (req, res) => {
 // create
 // create (requires auth)
 router.post('/', auth,
-  body('name').trim().notEmpty().withMessage('name required'),
-  body('phone').trim().notEmpty().withMessage('phone required'),
-  body('email').optional().isEmail().withMessage('invalid email'),
+  body('name')
+    .trim()
+    .notEmpty().withMessage('name required')
+    .isLength({ min: 2, max: 100 }).withMessage('name must be 2-100 characters')
+    .escape(),
+  body('phone')
+    .trim()
+    .notEmpty().withMessage('phone required')
+    .matches(/^[0-9+()\-\s]{6,25}$/).withMessage('phone must contain only digits, +, -, parentheses or spaces (6-25 chars)'),
+  body('email').optional().trim().isEmail().withMessage('invalid email').normalizeEmail(),
+  body('address').optional().trim().isLength({ max: 300 }).withMessage('address too long').escape(),
   async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
@@ -49,7 +57,10 @@ router.get('/:id', async (req, res) => {
 
 // update (requires auth)
 router.put('/:id', auth,
-  body('email').optional().isEmail().withMessage('invalid email'),
+  body('name').optional().trim().isLength({ min: 2, max: 100 }).withMessage('name must be 2-100 characters').escape(),
+  body('phone').optional().trim().matches(/^[0-9+()\-\s]{6,25}$/).withMessage('phone must contain only digits, +, -, parentheses or spaces (6-25 chars)'),
+  body('email').optional().trim().isEmail().withMessage('invalid email').normalizeEmail(),
+  body('address').optional().trim().isLength({ max: 300 }).withMessage('address too long').escape(),
   async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });

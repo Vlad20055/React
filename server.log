@@ -1,2 +1,10 @@
 Connected to MongoDB
 Service Center API running at http://localhost:3000
+[AI] Analyzing device: Dell Latitude (SN: TEST-001)
+[AI] ✓ Analysis generated successfully via Gemini 2.5 Flash
+[AI] Generating report for: Lenovo ThinkPad X1 (SN: LP-2024-001)
+[AI] ✓ Report generated successfully via Gemini 2.5 Flash
+[AI] Analyzing device: Huawei STK-L21 (SN: 867679047121325)
+[AI] ✓ Analysis generated successfully via Gemini 2.5 Flash
+[AI] Generating report for: Huawei STK-L21 (SN: 867679047121325)
+[AI] ✓ Report generated successfully via Gemini 2.5 Flash

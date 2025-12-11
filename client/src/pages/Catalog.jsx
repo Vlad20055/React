@@ -6,6 +6,8 @@ export default function Catalog(){
   const [devices, setDevices] = useState([])
   const [q, setQ] = useState('')
   const [error, setError] = useState(null)
+  const [hovered, setHovered] = useState(null)
+  const [pressed, setPressed] = useState(null)
 
   useEffect(()=>{
     let mounted = true
@@ -14,7 +16,7 @@ export default function Catalog(){
   },[q])
 
   return (
-    <div>
+    <div className="catalog-page">
       <h2>Catalog</h2>
       {error && <div className="card" style={{background:'#ffecec',color:'#900'}}>{error}</div>}
       <div className="card small">
@@ -22,11 +24,21 @@ export default function Catalog(){
       </div>
       <div className="grid" style={{marginTop:12}}>
         {devices.map(d=> (
-          <div className="card" key={d._id}>
+          <div
+            className={`card ${hovered === d._id ? 'is-hovered' : ''}`}
+            key={d._id}
+            onMouseEnter={() => setHovered(d._id)}
+            onMouseLeave={() => setHovered(null)}
+          >
             <h3>{d.brand} {d.model}</h3>
             <p className="small">Serial: {d.serial}</p>
             <p className="muted small">Owner: {d.client?.name}</p>
-            <Link to={`/devices/${d._id}`} className="btn">View</Link>
+            <Link
+              to={`/devices/${d._id}`}
+              className={`btn ${pressed === d._id ? 'pressed' : ''}`}
+              onMouseDown={() => setPressed(d._id)}
+              onMouseUp={() => setPressed(null)}
+            >View</Link>
           </div>
         ))}
       </div>
